@@ -1,0 +1,83 @@
+<beans xmlns = "http://www.springframework.org/schema/beans"
+       xmlns:context = "http://www.springframework.org/schema/context"
+       xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation = "
+   http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/data/jpa
+   http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx.xsd
+   http://www.springframework.org/schema/aop
+   http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package = "com.telecom" />
+    <jpa:repositories base-package="com.telecom.dao.api" />
+
+    <bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name = "prefix" value = "/WEB-INF/jsp/" />
+        <property name = "suffix" value = ".jsp" />
+    </bean>
+
+    <bean name = "helloController" class = "com.telecom.HelloController">
+        <property name = "msg" value = "qqq"/>
+    </bean>
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="telecomjpa"/>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- the transactional semantics... -->
+        <tx:attributes>
+            <!-- all methods starting with 'get' are read-only -->
+            <tx:method name="get*" read-only="true"/>
+            <!-- other methods use the default transaction settings (see below) -->
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="planServiceOperation" expression="execution(* com.telecom.services.api.PlanService.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="planServiceOperation"/>
+    </aop:config>
+
+    <bean id="planService" class="com.telecom.services.impl.PlanServiceImpl"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/ecare?useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+        <property name="username" value="root" />
+        <property name="password" value="qwerasdf" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--<bean name = "entityManager" class = "javax.persistence.EntityManager">
+    </bean>-->
+    <!--<bean name = "OptionDao" class = "com.telecom.dao.jpa.JpaOptionDao" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "PlanDao" class = "com.telecom.dao.jpa.JpaPlanDao" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "ContractDao" class = "com.telecom.dao.jpa.JpaContractDao" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "UserDao" class = "com.telecom.dao.jpa.JpaUserDao" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "OptionService" class = "com.telecom.services.impl.OptionServiceImpl" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "PlanService" class = "com.telecom.services.impl.PlanServiceImpl" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "ContractService" class = "com.telecom.services.impl.ContractServiceImpl" autowire = "constructor">
+    </bean>-->
+    <!--<bean name = "UserService" class = "com.telecom.services.impl.UserServiceImpl" autowire = "constructor">
+    </bean>-->
+
+
+</beans>
