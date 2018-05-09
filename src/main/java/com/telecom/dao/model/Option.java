@@ -1,5 +1,8 @@
 package com.telecom.dao.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,26 +26,30 @@ public class Option extends GenericEntity{
 
     @Column(nullable = false)
     private boolean archival;
-    
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany/*(fetch = FetchType.LAZYEAGER)*/
     @JoinTable(name = "required_options", 
     joinColumns = @JoinColumn(name = "id_option"),
     inverseJoinColumns = @JoinColumn(name = "id_target_option"))
     private List<Option> requiredOptions;
-    
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany/*(fetch = FetchType.LAZYEAGER)*/
     @JoinTable(name = "incompatible_options",
     joinColumns = @JoinColumn(name = "id_option"),
     inverseJoinColumns = @JoinColumn(name = "id_target_option"))
     private List<Option> incompatibleOptions;
-    
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany/*(fetch = FetchType.LAZYEAGER)*/
     @JoinTable(name = "available_options",
             joinColumns = @JoinColumn(name = "id_option", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_plan", referencedColumnName = "id"))
     private List<Plan> availablePlans;
-    
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany/*(fetch = FetchType.LAZYEAGER)*/
     @JoinTable(name = "contract_options",
             joinColumns = @JoinColumn(name = "id_added_option", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_contract", referencedColumnName = "id"))

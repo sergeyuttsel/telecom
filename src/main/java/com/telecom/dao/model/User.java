@@ -1,5 +1,8 @@
 package com.telecom.dao.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.List;
@@ -42,7 +45,8 @@ public class User extends GenericEntity {
         EMPLOYEE, CLIENT
     };
 
-    @OneToMany(targetEntity = Contract.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Contract.class, mappedBy = "user", /*fetch = FetchType.LAZY,*/ cascade = CascadeType.ALL)
     List<Contract> contracts;
 
     public String getFirstName() {

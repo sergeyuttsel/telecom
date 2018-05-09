@@ -12,10 +12,11 @@
 
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 <title>Edit option</title>
-<link href="<c:url value="/bootstrap4/css/bootstrap.css"/>" rel="stylesheet">
+	<link href="<c:url value="/resources/bootstrap4/css/bootstrap.css"/>" media="screen" type= "text/css" rel="stylesheet">
+	<script src="<c:url value="/resources/bootstrap4/js/bootstrap.js" />"></script>
 </head>
 <body>
-<%
+<%--<%
 		session = request.getSession(false);
 		User sessionUser = null;
 		if (session.getAttribute("user") != null) {
@@ -23,7 +24,7 @@
 		}
 		boolean sessionEmployee = sessionUser.getRole().equals(Role.EMPLOYEE);
 		pageContext.setAttribute("sessionEmployee", sessionEmployee);
-	%>
+	%>--%>
 	<form action="/telecom/updateuser" method="POST">
 		<div class="container">
 			<%-- User --%>
@@ -74,9 +75,9 @@
 						<th>Plan</th>
 						<th>Change plan</th>
 						<th>Change options</th>
-						<c:if test="${sessionEmployee == true}">
+						<%--<c:if test="${sessionEmployee == true}">--%>
 							<th>Remove contract</th>
-						</c:if>
+						<%--</c:if>--%>
 					</tr>
 				</thead>
 				<tbody>
@@ -96,10 +97,10 @@
 							<td><button type="submit" formaction="/telecom/changeoptions"
 									name="idContract" value="${iContract.id}">Change
 									options</button></td>
-							<c:if test="${sessionEmployee == true}">
+							<%--<c:if test="${sessionEmployee == true}">--%>
 							<td><button type="submit" formaction="/telecom/removecontracthandler" formmethod="POST"
 									name="idContract" value="${iContract.id}">Remove contract</button></td>
-							</c:if>
+							<%--</c:if>--%>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -111,7 +112,7 @@
 
 	<%-- Create contract --%>
 	
-	<c:if test="${sessionEmployee == true}">
+	<%--<c:if test="${sessionEmployee == true}">--%>
 		<form action="/telecom/createcontracthandler" method="POST">
 			<div class="container">
 				<%-- User --%>
@@ -135,7 +136,7 @@
 
 			</div>
 		</form>
-	</c:if>
+	<%--</c:if>--%>
 	<%-- End create contract --%>
 
 	<!--111
@@ -174,6 +175,5 @@
 	</form>
 	111-->
 
-	<script src="<c:url value="/bootstrap4/js/bootstrap.js"/>"></script>
 </body>
 </html>

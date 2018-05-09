@@ -1,5 +1,8 @@
 package com.telecom.dao.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,11 +15,13 @@ public class Contract extends GenericEntity {
 	@Column(name = "phone_number", nullable = false)
 	private String phoneNumber;
 
-	@ManyToOne(targetEntity = Plan.class, fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToOne(targetEntity = Plan.class/*, fetch = FetchType.LAZY*/)
 	@JoinColumn(name = "id_plan")
 	private Plan plan;
 
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToOne(targetEntity = User.class/*, fetch = FetchType.LAZY*/)
 	@JoinColumn(name = "id_user")
 	private User user;
 
@@ -26,7 +31,8 @@ public class Contract extends GenericEntity {
 	@Column(name = "company_block", nullable = false)
 	private boolean companyBlock;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(/*fetch = FetchType.LAZY,*/ cascade = CascadeType.ALL)
 	@JoinTable(name = "contract_options", joinColumns = @JoinColumn(name = "id_contract", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_added_option", referencedColumnName = "id"))
 	private List<Option> contractOptions;
 

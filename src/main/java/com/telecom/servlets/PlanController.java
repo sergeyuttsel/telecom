@@ -32,6 +32,14 @@ public class PlanController {
     @Autowired
     PlanService planService;
 
+    @Autowired
+    OptionService optionService;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String root() {
+        return "index";
+    }
+
     @RequestMapping(value = "/allplans", method = RequestMethod.GET)
     protected String displayAllPlans(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -49,5 +57,118 @@ public class PlanController {
         Plan plan = planService.findById(idPlan);
         request.setAttribute("plan", plan);
         return "plan";
+    }
+
+    @RequestMapping(value = "/editplan", method = RequestMethod.GET)
+    protected String editPlan(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String stringIdPlan = (String) request.getParameter("idPlan");
+        int idPlan = Integer.parseInt(stringIdPlan);
+        Plan plan = planService.findById(idPlan);
+        request.setAttribute("plan", plan);
+        Iterable<Option> optionIterable = optionService.findAll();
+        request.setAttribute("optionList", optionIterable);
+        return "editplan";
+    }
+
+    @RequestMapping(value = "/createplan", method = RequestMethod.GET)
+    protected String createPlan(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Iterable<Option> optionIterable = optionService.findAll();
+        request.setAttribute("optionList", optionIterable);
+        return "createplan";
+    }
+
+    @RequestMapping(value = "/updateplan", method = RequestMethod.POST)
+    protected String updatePlan(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            String stringIdPlan = (String) request.getParameter("idPlan");
+            int idPlan = Integer.parseInt(stringIdPlan);
+            Plan plan = planService.findById(idPlan);
+            String name = (String) request.getParameter("name");
+            if (name == null)
+                throw new InputException();
+            plan.setName(name);
+            float price = Float.parseFloat(request.getParameter("price"));
+            plan.setPrice(price);
+            boolean archival = Boolean.parseBoolean(request.getParameter("archival"));
+            plan.setArchival(archival);
+
+            // Create list of new available options.
+            List<Option> listAvailableOptions = new ArrayList<Option>();
+            String[] availableStringIdOptions = request.getParameterValues("available");
+            if (availableStringIdOptions != null) {
+                for (String strIdAvailableOption : availableStringIdOptions) {
+                    int idAvailableOption = Integer.parseInt(strIdAvailableOption);
+                    Option availableOption = optionService.findById(idAvailableOption);
+                    listAvailableOptions.add(availableOption);
+                }
+            }
+            try {
+                plan.setAvailableOptions(listAvailableOptions);
+                planService.update(plan);
+            } /*catch (DaoException | InputException ex) {
+
+            }*/ catch (Exception ex) {
+                throw new Error("Error on update plan");
+            }
+            request.setAttribute("plan", plan);
+            return "plan";
+        }
+        // If error occur redirect on page with all plans list.
+        catch (InputException ex) {
+            // throw new RuntimeException(ex);
+            Iterable<Plan> planIterable = planService.findAll();
+            request.setAttribute("planList", planIterable);
+            return "allplans";
+        }
+
+        //return "allplans";
+    }
+
+    @RequestMapping(value = "/createplanhandler", method = RequestMethod.POST)
+    protected String createPlanHandler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            Plan plan = new Plan();
+            String name = (String) request.getParameter("name");
+            if (name == null)
+                throw new InputException();
+            plan.setName(name);
+            float price = Float.parseFloat(request.getParameter("price"));
+            plan.setPrice(price);
+            boolean archival = Boolean.parseBoolean(request.getParameter("archival"));
+            plan.setArchival(archival);
+
+            // Create list of available options.
+            List<Option> listAvailableOptions = new ArrayList<Option>();
+            String[] availableStringIdOptions = request.getParameterValues("available");
+            if (availableStringIdOptions != null) {
+                for (String strIdAvailableOption : availableStringIdOptions) {
+                    int idAvailableOption = Integer.parseInt(strIdAvailableOption);
+                    Option availableOption = optionService.findById(idAvailableOption);
+                    listAvailableOptions.add(availableOption);
+                }
+            }
+            try {
+                plan.setAvailableOptions(listAvailableOptions);
+                planService.create(plan);
+            } /*catch (DaoException | InputException ex) {
+                throw new RuntimeException();
+            }*/ catch (Exception ex) {
+                throw new Error("Error on create plan handler");
+            }
+            request.setAttribute("plan", plan);
+            return "plan";
+        }
+        // If error occur redirect on page with all plans list.
+        catch (InputException ex) {
+            // throw new RuntimeException(ex);
+            Iterable<Plan> planIterable = planService.findAll();
+            request.setAttribute("planList", planIterable);
+            return "allplans";
+        }
     }
 }

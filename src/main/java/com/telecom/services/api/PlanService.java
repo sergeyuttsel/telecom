@@ -12,6 +12,9 @@ import java.util.List;
 public interface PlanService {
     Iterable<Plan> findAll();
     Plan findById(int id);
+    void update(Plan plan);
+    void create(Plan plan);
+    boolean isOptionsCompatible(List<Option> listOptions);
     /*Plan getPlan(int idPlan);
     void updatePlan(Plan plan, List<Option> newAvailableOptions) throws InputException, DaoException;
     void createPlan(Plan plan, List<Option> newAvailableOptions) throws InputException, DaoException;

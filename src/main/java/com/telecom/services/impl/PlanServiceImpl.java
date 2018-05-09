@@ -18,19 +18,19 @@ import java.util.List;
 @Component
 public class PlanServiceImpl implements PlanService {
 
+    @Autowired
+    private PlanDao planDao;
+
     public void setPlanDao(PlanDao planDao) {
         this.planDao = planDao;
     }
 
-    @Autowired
-    private PlanDao planDao;
-
-    @PersistenceUnit
+    /*@PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
-    }
+    }*/
 
     public PlanServiceImpl() {
 
@@ -43,6 +43,43 @@ public class PlanServiceImpl implements PlanService {
 
     public Plan findById(int idPlan) {
         return planDao.findById(idPlan).get();
+    }
+
+    public void update (Plan plan) {
+        save(plan);
+    }
+
+    public void create (Plan plan) {
+        if (uniqueNamePlan(plan.getName()) == false)
+            throw new Error("Plan name not unique");
+        save(plan);
+    }
+
+    protected void save (Plan plan) {
+        if (isOptionsCompatible(plan.getAvailableOptions()) == false) throw new Error("Incompatible options in plan.getAvailableOptions()");
+        planDao.save(plan);
+    }
+
+    public boolean isOptionsCompatible(List<Option> listOptions) {
+        for (Option iOption : listOptions) {
+            List<Option> iOptionIncompatibleList = iOption.getIncompatibleOptions();
+            for (Option iTargetOption : listOptions) {
+                if (iOptionIncompatibleList.contains(iTargetOption)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean uniqueNamePlan(String name) {
+        List<Plan> list = planDao.findByName(name);
+        boolean result = false;
+        if (list.size() == 0)
+            result = true;
+        else
+            result = false;
+        return result;
     }
 
     /*public List<Plan> getNotArchival() {

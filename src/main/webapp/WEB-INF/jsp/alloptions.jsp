@@ -8,7 +8,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">
 <title>All options</title>
-<link href="<c:url value="/bootstrap4/css/bootstrap.css"/>" rel="stylesheet">
+	<link href="<c:url value="/resources/bootstrap4/css/bootstrap.css"/>" media="screen" type= "text/css" rel="stylesheet">
+	<script src="<c:url value="/resources/bootstrap4/js/bootstrap.js" />"></script>
 </head>
 <body>
 	<div class="container">

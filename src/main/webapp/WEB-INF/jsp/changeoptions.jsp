@@ -7,13 +7,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css"
-	href="./bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css"
-	href="./bootstrap/css/bootstrap-theme.min.css">
 <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">
 <title>Change options</title>
-<link href="<c:url value="/bootstrap4/css/bootstrap.css"/>" rel="stylesheet">
+	<link href="<c:url value="/resources/bootstrap4/css/bootstrap.css"/>" media="screen" type= "text/css" rel="stylesheet">
+	<script src="<c:url value="/resources/bootstrap4/js/bootstrap.js" />"></script>
 </head>
 <body>
 	<form action="/telecom/changeoptionshandler" method="POST">
@@ -79,8 +76,5 @@
 			</div>
 		</div>
 	</form>
-	<script type="text/javascript" src="./js/jquery-3.0.0.min.js"></script>
-	<script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="./bootstrap/js/npm.js"></script>
 </body>
 </html>

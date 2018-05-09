@@ -8,13 +8,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css"
-	href="./bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css"
-	href="./bootstrap/css/bootstrap-theme.min.css">
 <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">
 <title>Create user</title>
-<link href="<c:url value="/bootstrap4/css/bootstrap.css"/>" rel="stylesheet">
+	<link href="<c:url value="/resources/bootstrap4/css/bootstrap.css"/>" media="screen" type= "text/css" rel="stylesheet">
+	<script src="<c:url value="/resources/bootstrap4/js/bootstrap.js" />"></script>
 </head>
 <body>
 	<form action="/telecom/createuserhandler" method="POST">
@@ -38,7 +35,7 @@
 					<input type="text" name="passport"> <br>
 					Adress <br>
 					<input type="text" name="adress"> <br>
-					<fmt:formatDate type="date" value="2000-01-01" pattern="yyyy-MM-dd" var="theFormattedDate"/>
+					<fmt:formatDate type="date" value="${now}" pattern="yyyy-MM-dd" var="theFormattedDate"/>
 					Birthday <br>
 					<input type="date" name="birthday" value="${theFormattedDate}"> <br>
 					Password <br>
@@ -57,8 +54,5 @@
 			</div>
 		</div>
 	</form>
-	<script type="text/javascript" src="./js/jquery-3.0.0.min.js"></script>
-	<script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="./bootstrap/js/npm.js"></script>
 </body>
 </html>
