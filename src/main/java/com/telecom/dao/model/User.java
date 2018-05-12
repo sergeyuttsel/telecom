@@ -46,7 +46,7 @@ public class User extends GenericEntity {
     };
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Contract.class, mappedBy = "user", /*fetch = FetchType.LAZY,*/ cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Contract.class, mappedBy = "user"/*, fetch = FetchType.LAZY*//*, cascade = CascadeType.ALL*/)
     List<Contract> contracts;
 
     public String getFirstName() {

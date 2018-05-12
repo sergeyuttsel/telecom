@@ -47,14 +47,17 @@
         <aop:pointcut id="planServiceOperation" expression="execution(* com.telecom.services.api.PlanService.*(..))"/>
         <aop:pointcut id="optionServiceOperation" expression="execution(* com.telecom.services.api.OptionService.*(..))"/>
         <aop:pointcut id="userServiceOperation" expression="execution(* com.telecom.services.api.UserService.*(..))"/>
+        <aop:pointcut id="contractServiceOperation" expression="execution(* com.telecom.services.api.ContractService.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="planServiceOperation"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="optionServiceOperation"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="userServiceOperation"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="contractServiceOperation"/>
     </aop:config>
 
     <bean id="planService" class="com.telecom.services.impl.PlanServiceImpl"/>
     <bean id="optionService" class="com.telecom.services.impl.OptionServiceImpl"/>
     <bean id="userService" class="com.telecom.services.impl.UserServiceImpl"/>
+    <bean id="contractService" class="com.telecom.services.impl.ContractServiceImpl"/>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />

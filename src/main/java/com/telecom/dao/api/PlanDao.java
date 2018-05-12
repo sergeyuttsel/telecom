@@ -10,5 +10,6 @@ import java.util.List;
 @Component
 public interface PlanDao extends CrudRepository<Plan, Integer> {
     List<Plan> findByName(String name);
+    List<Plan> getByArchival(boolean archival);
 
 }

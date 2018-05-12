@@ -15,6 +15,7 @@ public interface PlanService {
     void update(Plan plan);
     void create(Plan plan);
     boolean isOptionsCompatible(List<Option> listOptions);
+    List<Plan> getNotArchival();
     /*Plan getPlan(int idPlan);
     void updatePlan(Plan plan, List<Option> newAvailableOptions) throws InputException, DaoException;
     void createPlan(Plan plan, List<Option> newAvailableOptions) throws InputException, DaoException;

@@ -88,8 +88,6 @@ public class PlanController {
             int idPlan = Integer.parseInt(stringIdPlan);
             Plan plan = planService.findById(idPlan);
             String name = (String) request.getParameter("name");
-            if (name == null)
-                throw new InputException();
             plan.setName(name);
             float price = Float.parseFloat(request.getParameter("price"));
             plan.setPrice(price);
@@ -106,19 +104,15 @@ public class PlanController {
                     listAvailableOptions.add(availableOption);
                 }
             }
-            try {
+
                 plan.setAvailableOptions(listAvailableOptions);
                 planService.update(plan);
-            } /*catch (DaoException | InputException ex) {
 
-            }*/ catch (Exception ex) {
-                throw new Error("Error on update plan");
-            }
             request.setAttribute("plan", plan);
             return "plan";
         }
         // If error occur redirect on page with all plans list.
-        catch (InputException ex) {
+        catch (Throwable ex) {
             // throw new RuntimeException(ex);
             Iterable<Plan> planIterable = planService.findAll();
             request.setAttribute("planList", planIterable);
@@ -134,8 +128,6 @@ public class PlanController {
         try {
             Plan plan = new Plan();
             String name = (String) request.getParameter("name");
-            if (name == null)
-                throw new InputException();
             plan.setName(name);
             float price = Float.parseFloat(request.getParameter("price"));
             plan.setPrice(price);
@@ -152,19 +144,15 @@ public class PlanController {
                     listAvailableOptions.add(availableOption);
                 }
             }
-            try {
+
                 plan.setAvailableOptions(listAvailableOptions);
                 planService.create(plan);
-            } /*catch (DaoException | InputException ex) {
-                throw new RuntimeException();
-            }*/ catch (Exception ex) {
-                throw new Error("Error on create plan handler");
-            }
+
             request.setAttribute("plan", plan);
             return "plan";
         }
         // If error occur redirect on page with all plans list.
-        catch (InputException ex) {
+        catch (Throwable ex) {
             // throw new RuntimeException(ex);
             Iterable<Plan> planIterable = planService.findAll();
             request.setAttribute("planList", planIterable);

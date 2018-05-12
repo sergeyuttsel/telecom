@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface ContractDao extends CrudRepository<Contract, Integer> {
-
+    List<Contract> findByPhoneNumber(String phoneNumber);
 }

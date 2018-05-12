@@ -82,59 +82,8 @@ public class PlanServiceImpl implements PlanService {
         return result;
     }
 
-    /*public List<Plan> getNotArchival() {
-        return planDao.findNotArchival();
-
-    }
-    
-    public Plan getPlan(int idPlan) {
-        return planDao.find(idPlan);
+    public List<Plan> getNotArchival() {
+        return planDao.getByArchival(false);
     }
 
-    public void updatePlan(Plan plan, List<Option> newAvailableOptions) throws DaoException, InputException {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            /
-            if (isOptionsCompatible(newAvailableOptions) == false) throw new InputException();
-            plan.setAvailableOptions(newAvailableOptions);
-            planDao.save(plan);
-            entityManager.flush();
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-            throw new DaoException();
-        }
-    }
-
-    public boolean isOptionsCompatible(List<Option> listOptions) {
-    	for (Option iOption : listOptions) {
-            List<Option> iOptionIncompatibleList = iOption.getIncompatibleOptions();
-            for (Option iTargetOption : listOptions) {
-                if (iOptionIncompatibleList.contains(iTargetOption)) {
-                    return false;
-                }
-            }
-        }
-    	return true;
-    }
-    
-    public void createPlan(Plan plan, List<Option> newAvailableOptions)
-            throws DaoException, InputException {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            if (planDao.uniqueNamePlan(plan.getName()) == false)
-                throw new InputException();
-
-            if (isOptionsCompatible(newAvailableOptions) == false) throw new InputException();
-            plan.setAvailableOptions(newAvailableOptions);
-            planDao.create(plan);
-            entityManager.flush();
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-            throw new DaoException();
-        }
-    }*/
 }

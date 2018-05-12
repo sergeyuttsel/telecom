@@ -11,6 +11,11 @@ import com.telecom.services.api.OptionService;
 import com.telecom.services.api.PlanService;
 import com.telecom.services.api.UserService;
 import com.telecom.util.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -23,259 +28,157 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet({ "/createcontract", "/editcontract", "/changeplan", "/changeplanhandler", "/changeoptions", "/changeoptionshandler", "/createcontracthandler", "/removecontracthandler" })
+@Controller
+@Component
+//@WebServlet({ "/createcontract", "/editcontract", "/changeplan", "/changeplanhandler", "/changeoptions", "/changeoptionshandler", "/createcontracthandler", "/removecontracthandler" })
 public class ContractController extends HttpServlet {
-	/*private static final long serialVersionUID = 1L;
+    @Autowired
+    ContractService contractService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    PlanService planService;
+    @Autowired
+    OptionService optionService;
 
-	PlanService planService;
-	OptionService optionService;
-	UserService userService;
-	ContractService contractService;
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String servletPath = request.getServletPath();
-		// Handler for display list of all options
-		if (servletPath.equals("/createcontract")) {
-			createContract(request, response);
-		} else if (servletPath.equals("/editcontract")) {
-			editContract(request, response);
-		} else if (servletPath.equals("/changeplan")) {
-			changePlan(request, response);
-		} else if (servletPath.equals("/changeoptions")) {
-			changeOptions(request, response);
-		}
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String jsp = null;
-		String servletPath = request.getServletPath();
-		if (servletPath.equals("/usercontracts")) {
-			userContracts(request, response);
-		} else if (servletPath.equals("/changeplanhandler")) {
-			changePlanHandler(request, response);
-		} else if (servletPath.equals("/changeoptionshandler")) {
-			changeOptionsHandler(request, response);
-		} else if (servletPath.equals("/createcontracthandler")) {
-			createContractHandler(request, response);
-		} else if (servletPath.equals("/removecontracthandler")) {
-			removeContractHandler(request, response);
-		}
-	}
-
-	protected void createContract(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdUser = (String) request.getParameter("idUser");
-		int idUser = Integer.parseInt(stringIdUser);
-		User user = userService.getUser(idUser);
-		request.setAttribute("user", user);
-		List<Plan> planList = planService.getNotArchival();
-
-		request.setAttribute("planList", planList);
-		List<Option> optionList = optionService.getAllOptions();
-		request.setAttribute("optionList", optionList);
-		jspPath = "/WEB-INF/jsp/createcontract.jsp";
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-
-	protected void editContract(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdContract = (String) request.getParameter("idContract");
-		int idContract = Integer.parseInt(stringIdContract);
-		Contract contract = contractService.getContract(idContract);
-		request.setAttribute("contract", contract);
-		List<Plan> planList = planService.getAllPlans();
-		request.setAttribute("planList", planList);
-		jspPath = "/WEB-INF/jsp/editcontract.jsp";
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-
-	protected void changePlan(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdContract = (String) request.getParameter("idContract");
-		int idContract = Integer.parseInt(stringIdContract);
-		Contract contract = contractService.getContract(idContract);
-		request.setAttribute("contract", contract);
-		List<Plan> planList = planService.getNotArchival();
-		request.setAttribute("planList", planList);
-		jspPath = "/WEB-INF/jsp/changeplan.jsp";
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-
-	protected void changePlanHandler(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdContract = (String) request.getParameter("idContract");
-		int idContract = Integer.parseInt(stringIdContract);
-		Contract contract = contractService.getContract(idContract);
-		String stringIdPlan = (String) request.getParameter("idPlan");
-		int idPlan = Integer.parseInt(stringIdPlan);
-		Plan plan = planService.getPlan(idPlan);
-		contract.setPlan(plan);
-		contractService.clearContractOptions(contract);
-		
-		//request.setAttribute("contract", contract);
-		
-		try {
-			contractService.updateContract(contract);
-		} catch (DaoException | InputException ex) {
-
-		} catch (Exception ex) {
-
-		}
-
-		//List<Plan> planList = planService.getNotArchival();
-		//request.setAttribute("planList", planList);
-		User user = contract.getUser();
-		request.setAttribute("user", user);
-		jspPath = "/WEB-INF/jsp/edituser.jsp";
-		
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-
-	protected void changeOptions(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdContract = (String) request.getParameter("idContract");
-		int idContract = Integer.parseInt(stringIdContract);
-		Contract contract = contractService.getContract(idContract);
-		request.setAttribute("contract", contract);
-		List<Option> optionList = contractService.getAvailableOptions(contract);
-		request.setAttribute("optionList", optionList);
-		jspPath = "/WEB-INF/jsp/changeoptions.jsp";
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-	
-	protected void changeOptionsHandler(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdContract = (String) request.getParameter("idContract");
-		int idContract = Integer.parseInt(stringIdContract);
-		Contract contract = contractService.getContract(idContract);
-		
-		List<Option> listConnectedOptions = new ArrayList<Option>();
-		String[] stringConnectedIdOptions = request.getParameterValues("connected");
-		if (stringConnectedIdOptions != null) {
-            for (String strIdConnectedOption : stringConnectedIdOptions) {
-                int idConnectedOption = Integer.parseInt(strIdConnectedOption);
-                Option connectedOption = optionService.getOption(idConnectedOption);
-                listConnectedOptions.add(connectedOption);
-            }
-        }
-		
+    @RequestMapping(value = "/createcontracthandler", method = RequestMethod.POST)
+    protected String createContractHandler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
-        	if (planService.isOptionsCompatible(listConnectedOptions) == false) throw new InputException();
-            contract.setContractOptions(listConnectedOptions);
-            contractService.updateContract(contract);
-        } catch (DaoException | InputException ex) {
-        	throw new RuntimeException();
-        } catch (Exception ex) {
-        	throw new RuntimeException();
+            String stringIdUser = (String) request.getParameter("idUser");
+            int idUser = Integer.parseInt(stringIdUser);
+            User user = userService.findById(idUser);
+            Contract contract = new Contract();
+            //request.setAttribute("user", contract);
+            String phoneNumber = (String) request.getParameter("phoneNumber");
+            Iterable<Plan> planIterable = planService.findAll();
+            if (contractService.findByPhoneNumber(phoneNumber).isEmpty() != true) throw new Exception();
+            contract.setPhoneNumber(phoneNumber);
+            contract.setPlan(planIterable.iterator().next());
+            contract.setClientBlock(false);
+            contract.setEmployeeBlock(false);
+            //user.getContracts().add(contract);
+            contract.setUser(user);
+            contractService.save(contract);
+            user = userService.findById(idUser);
+            request.setAttribute("user", user);
+            return "edituser";
         }
-        User user = contract.getUser();
-		request.setAttribute("user", user);
-		request.setAttribute("user", user);
-		jspPath = "/WEB-INF/jsp/edituser.jsp";
-		
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-	
-	protected void createContractHandler(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		try {
-		String stringIdUser = (String) request.getParameter("idUser");
-		if (stringIdUser == null)
-			throw new InputException();
-		int idUser = Integer.parseInt(stringIdUser);
-		User user = userService.getUser(idUser);
-		Contract contract = new Contract();
-		//request.setAttribute("user", contract);
-		String phoneNumber = (String) request.getParameter("phoneNumber");
-		if (phoneNumber == null)
-			throw new InputException();
-		List<Plan> listPlan = planService.getAllPlans();
-		if (contractService.getByPhoneNumber(phoneNumber) != null) throw new InputException();
-		contract.setPhoneNumber(phoneNumber);
-		contract.setPlan(listPlan.get(0));
-		contract.setClientBlock(false);
-		contract.setEmployeeBlock(false);
-		//user.getContracts().add(contract);
-		contract.setUser(user);
-		try {
-            contractService.createContract(contract);
-			//userService.updateUser(user);
-        } catch (DaoException | InputException ex) {
-        	throw new RuntimeException();
-        }
-		request.setAttribute("user", user);
-		jspPath = "/WEB-INF/jsp/edituser.jsp";
-		}
-		catch (InputException ex) {
+        catch (Throwable ex) {
             //throw new RuntimeException(ex);
-            List<User> userList = userService.getAllClients();
-            request.setAttribute("userList", userList);
-            jspPath = "/WEB-INF/jsp/allclients.jsp";
+            Iterable<User> userIterable = userService.findAll();
+            request.setAttribute("userList", userIterable);
+            return "allclients";
         }
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
-	
-	// All user contracts �������� ��� ����� �������
-	protected void userContracts(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		String stringIdUser = (String) request.getParameter("idUser");
-		int idUser = Integer.parseInt(stringIdUser);
-		User user = userService.getUser(idUser);
-		request.setAttribute("user", user);
-		jspPath = "/WEB-INF/jsp/editcontracts.jsp";
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}
+    }
 
-	protected void removeContractHandler(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		ServletContext servletContext = getServletContext();
-		String jspPath;
-		try {
-		String stringIdContract = (String) request.getParameter("idContract");
-		if (stringIdContract == null)
-			throw new InputException();
-		int idcontract = Integer.parseInt(stringIdContract);
-		Contract contract = contractService.getContract(idcontract);
-		User user = contract.getUser();
-		contractService.removeContract(contract);
-		request.setAttribute("user", user);
-		jspPath = "/WEB-INF/jsp/edituser.jsp";
-		}
-		catch (InputException | DaoException ex) {
-            //throw new RuntimeException(ex);
-            List<User> userList = userService.getAllClients();
-            request.setAttribute("userList", userList);
-            jspPath = "/WEB-INF/jsp/allclients.jsp";
+    @RequestMapping(value = "/removecontracthandler", method = RequestMethod.POST)
+    protected String removeContractHandler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String stringIdContract = (String) request.getParameter("idContract");
+            int idcontract = Integer.parseInt(stringIdContract);
+            Contract contract = contractService.findById(idcontract);
+            int idUser = contract.getUser().getId();
+            contractService.delete(contract);
+            User user = userService.findById(idUser);
+            request.setAttribute("user", user);
+            return "edituser";
         }
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(jspPath);
-		requestDispatcher.forward(request, response);
-	}*/
-	
+        catch (Throwable ex) {
+            //throw new RuntimeException(ex);
+            Iterable<User> userIterable = userService.findAllClients();
+            request.setAttribute("userList", userIterable);
+            return "allclients";
+        }
+    }
+
+    @RequestMapping(value = "/changeplan", method = RequestMethod.GET)
+    protected String changePlan(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String stringIdContract = (String) request.getParameter("idContract");
+        int idContract = Integer.parseInt(stringIdContract);
+        Contract contract = contractService.findById(idContract);
+        request.setAttribute("contract", contract);
+        List<Plan> planList = planService.getNotArchival();
+        request.setAttribute("planList", planList);
+        return "changeplan";
+    }
+
+    @RequestMapping(value = "/changeoptions", method = RequestMethod.GET)
+    protected String changeOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String stringIdContract = (String) request.getParameter("idContract");
+        int idContract = Integer.parseInt(stringIdContract);
+        Contract contract = contractService.findById(idContract);
+        request.setAttribute("contract", contract);
+        List<Option> optionList = contractService.getAvailableOptions(contract);
+        request.setAttribute("optionList", optionList);
+        return "changeoptions";
+    }
+
+    @RequestMapping(value = "/changeplanhandler", method = RequestMethod.POST)
+    protected String changePlanHandler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String stringIdContract = (String) request.getParameter("idContract");
+            int idContract = Integer.parseInt(stringIdContract);
+            Contract contract = contractService.findById(idContract);
+            String stringIdPlan = (String) request.getParameter("idPlan");
+            int idPlan = Integer.parseInt(stringIdPlan);
+            Plan plan = planService.findById(idPlan);
+            contract.setPlan(plan);
+            contractService.clearContractOptions(contract);
+
+            //request.setAttribute("contract", contract);
+
+            contractService.save(contract);
+
+            //List<Plan> planList = planService.getNotArchival();
+            //request.setAttribute("planList", planList);
+            User user = contract.getUser();
+            request.setAttribute("user", user);
+            return "edituser";
+        } catch (Throwable ex) {
+                //throw new RuntimeException(ex);
+                Iterable<User> userIterable = userService.findAllClients();
+                request.setAttribute("userList", userIterable);
+                return "allclients";
+            }
+    }
+
+    @RequestMapping(value = "/changeoptionshandler", method = RequestMethod.POST)
+    protected String changeOptionsHandler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String stringIdContract = (String) request.getParameter("idContract");
+            int idContract = Integer.parseInt(stringIdContract);
+            Contract contract = contractService.findById(idContract);
+
+            List<Option> listConnectedOptions = new ArrayList<Option>();
+            String[] stringConnectedIdOptions = request.getParameterValues("connected");
+            if (stringConnectedIdOptions != null) {
+                for (String strIdConnectedOption : stringConnectedIdOptions) {
+                    int idConnectedOption = Integer.parseInt(strIdConnectedOption);
+                    Option connectedOption = optionService.findById(idConnectedOption);
+                    listConnectedOptions.add(connectedOption);
+                }
+            }
+
+
+                if (planService.isOptionsCompatible(listConnectedOptions) == false) throw new Exception();
+                contract.setContractOptions(listConnectedOptions);
+                contractService.save(contract);
+
+            User user = contract.getUser();
+            request.setAttribute("user", user);
+            return "edituser";
+        } catch (Throwable ex) {
+            //throw new RuntimeException(ex);
+            Iterable<User> userIterable = userService.findAllClients();
+            request.setAttribute("userList", userIterable);
+            return "allclients";
+        }
+    }
+
 }
