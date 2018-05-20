@@ -10,6 +10,7 @@ public interface UserService {
     Iterable<User> findAll();
     Iterable<User> findAllClients();
     User findById(int id);
+    User findByEmail(String email);
     void save(User user);
 	/*User getUser(int idUser);
     List<User> getAllUsers();

@@ -80,6 +80,18 @@
             <artifactId>spring-tx</artifactId>
             <version>5.0.5.RELEASE</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.0.5.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.0.5.RELEASE</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.persistence/persistence-api -->
         <dependency>
@@ -106,19 +118,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.2.16.Final</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>5.0.5.RELEASE</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>5.0.5.RELEASE</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
         <dependency>
             <groupId>commons-dbcp</groupId>

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserDao extends CrudRepository<User, Integer> {
     List<User> findByRole(User.Role role);
+    List<User> findByEmail(String email);
 }

@@ -83,14 +83,24 @@ public class UserController {
 			try {
 				User user = new User();
 				String firstName = (String) request.getParameter("firstName");
+				if (firstName == null)
+					throw new InputException();
 				user.setFirstName(firstName);
 				String lastName = (String) request.getParameter("lastName");
+				if (lastName == null)
+					throw new InputException();
 				user.setLastName(lastName);
 				String email = (String) request.getParameter("email");
+				if (email == null)
+					throw new InputException();
 				user.setEmail(email);
 				String passport = (String) request.getParameter("passport");
+				if (passport == null)
+					throw new InputException();
 				user.setPassport(passport);
 				String adress = (String) request.getParameter("adress");
+				if (adress == null)
+					throw new InputException();
 				user.setRole(User.Role.CLIENT);
 				user.setAdress(adress);
 				String birthday = (String) request.getParameter("birthday");
@@ -101,13 +111,19 @@ public class UserController {
 				}
 				user.setBirthday(calendar);
 				String password = (String) request.getParameter("password");
+				if (password == null)
+					throw new InputException();
 				user.setPassword(password);
+				try {
 					userService.save(user);
+				} catch (Exception ex) {
+					throw new Error("TELECOM_EXCEPTION Incorrect new user");
+				}
 				request.setAttribute("user", user);
 				return "user";
 			}
 			// If error occur redirect on page with all plans list.
-			catch (Throwable ex) {
+			catch (InputException ex) {
 				//throw new RuntimeException(ex);
 				Iterable<User> userIterable = userService.findAllClients();
 				request.setAttribute("userList", userIterable);
@@ -129,14 +145,24 @@ public class UserController {
 			int idUser = Integer.parseInt(stringIdUser);
 			User user = userService.findById(idUser);
 			String firstName = (String) request.getParameter("firstName");
+			if (firstName == null || firstName.isEmpty())
+				throw new InputException();
 			user.setFirstName(firstName);
 			String lastName = (String) request.getParameter("lastName");
+			if (lastName == null || lastName.isEmpty())
+				throw new InputException();
 			user.setLastName(lastName);
 			String email = (String) request.getParameter("email");
+			if (email == null || email.isEmpty())
+				throw new InputException();
 			user.setEmail(email);
 			String passport = (String) request.getParameter("passport");
+			if (passport == null || passport.isEmpty())
+				throw new InputException();
 			user.setPassport(passport);
 			String adress = (String) request.getParameter("adress");
+			if (adress == null || adress.isEmpty())
+				throw new InputException();
 			user.setAdress(adress);
 			user.setRole(User.Role.CLIENT);
 			String birthday = (String) request.getParameter("birthday");
@@ -144,15 +170,17 @@ public class UserController {
 			try {
 				calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(birthday));
 			} catch (Exception ex) {
-				throw new Exception("TELECOM_EXCEPTION Incorrect update data birthday user");
+				throw new Error("TELECOM_EXCEPTION Incorrect update data birthday user");
 			}
 			user.setBirthday(calendar);
-			userService.save(user);
+			try { userService.save(user); }  catch (Exception ex) {
+				throw new Error("TELECOM_EXCEPTION Incorrect update user");
+			}
 			request.setAttribute("user", user);
 			return "user";
 		}
 		// If error occur redirect on page with all plans list.
-		catch (Throwable ex) {
+		catch (InputException ex) {
 			//throw new RuntimeException(ex);
 			Iterable<User> userIterable = userService.findAllClients();
 			request.setAttribute("userList", userIterable);
