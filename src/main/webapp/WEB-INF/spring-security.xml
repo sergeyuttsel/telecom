@@ -18,8 +18,8 @@
                 <!-- Password is prefixed with {noop} to indicate to DelegatingPasswordEncoder that
                 NoOpPasswordEncoder should be used. This is not safe for production, but makes reading
                 in samples easier. Normally passwords should be hashed using BCrypt -->
-                <user name="jimi" password="{noop}jimispassword" authorities="ROLE_USER, ROLE_ADMIN"/>
-                <user name="bob" password="{noop}bobspassword" authorities="ROLE_USER"/>
+                <user name="qwer" password="{noop}1234" authorities="ROLE_USER, ROLE_ADMIN"/>
+                <user name="asdf" password="{noop}1234" authorities="ROLE_USER"/>
             </user-service>
         </authentication-provider>
     </authentication-manager>

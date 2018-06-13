@@ -2,22 +2,15 @@ package com.telecom.servlets;
 
 import com.telecom.dao.model.Option;
 import com.telecom.dao.model.Plan;
-import com.telecom.exception.DaoException;
-import com.telecom.exception.InputException;
 import com.telecom.services.api.OptionService;
 import com.telecom.services.api.PlanService;
-import com.telecom.util.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
